@@ -28,6 +28,7 @@ class AbstractJob
   field :environment,           type: String
   field :invalid_records_count, type: Integer,  default: 0
   field :failed_records_count,  type: Integer,  default: 0
+  field :harvest_errors_count,  type: Integer,  default: 0
   field :posted_records_count,  type: Integer,  default: 0
   field :parser_code,           type: String
   field :last_posted_record_id,  type: String
@@ -35,6 +36,7 @@ class AbstractJob
   embeds_many :invalid_records
   embeds_many :failed_records
   embeds_one :harvest_failure
+  embeds_many :harvest_errors
 
   belongs_to :harvest_schedule
 
@@ -178,10 +180,11 @@ class AbstractJob
   def calculate_errors_count
     self.invalid_records_count = self.invalid_records.count
     self.failed_records_count = self.failed_records.count
+    self.harvest_errors_count = self.harvest_errors.count
   end
 
   def total_errors_count
-    self.invalid_records.count + self.failed_records.count
+    self.invalid_records.count + self.failed_records.count + self.harvest_errors_count
   end
 
   def errors_over_limit?
@@ -191,6 +194,7 @@ class AbstractJob
   def clear_raw_data
     self.invalid_records.destroy_all
     self.failed_records.destroy_all
+    self.harvest_errors.destroy_all
   end
 
   def increment_records_count!

@@ -55,9 +55,17 @@ class HarvestJob < AbstractJob
       parser_klass = parser.loader.parser_class
       parser_klass.environment = environment if environment.present?
 
+      # Reset errors list
+      parser_klass._errors = {}
+
       parser_klass.records(options).each_with_index do |record, index|
         yield record, index
       end
+
+      parser_klass._errors.each_pair do |key, value|
+        self.harvest_errors.create(url: key, message: value)
+      end
+
     rescue StandardError, ScriptError => e
       self.create_harvest_failure(exception_class: e.class, message: e.message, backtrace: e.backtrace[0..30])
       self.fail_job(e.message)
