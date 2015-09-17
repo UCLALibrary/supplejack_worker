@@ -13,7 +13,7 @@ class ParserVersion < ActiveResource::Base
   self.element_name = "version"
 
   def last_harvested_at
-    job = self.harvest_jobs('finished')[1]
+    job = self.harvest_jobs('finished').last
     job ? job.start_time : nil
   end
 
