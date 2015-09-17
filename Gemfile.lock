@@ -1,6 +1,6 @@
 GIT
   remote: https://github.com/DigitalNZ/supplejack_common.git
-  revision: 4b1c508a705fbd3dc23a76ce1c8af644db2f0339
+  revision: cfef45f2e0eb38a354173920a21c0d5f89e29e1b
   branch: handle_exception
   specs:
     supplejack_common (0.0.2)
