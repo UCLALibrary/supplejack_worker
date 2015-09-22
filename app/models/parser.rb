@@ -12,7 +12,7 @@ class Parser < ActiveResource::Base
   self.user = ENV['MANAGER_API_KEY']
 
   def last_harvested_at
-    job = self.harvest_jobs.first
+    job = self.harvest_jobs.last
     job ? job.start_time : nil
   end
 
