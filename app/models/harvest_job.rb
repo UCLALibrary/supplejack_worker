@@ -57,7 +57,8 @@ class HarvestJob < AbstractJob
 
       # SUSPECIOUS. TRY WHAT I DID IN METRICS CRON
       # https://boost.airbrake.io/projects/96483/groups/1663437486133491168/notices/1663437485249530348
-      parser_klass.records(options).no_timeout.each_with_index do |record, index|
+      Rails.logger.info "HARVESTING ISSUE: #{parser_klass}, #{options}"
+      parser_klass.records(options).each_with_index do |record, index|
         yield record, index
       end
     rescue StandardError, ScriptError => e
