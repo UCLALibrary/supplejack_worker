@@ -18,6 +18,7 @@ class HarvestJob < AbstractJob
   validates :mode, inclusion: ['normal', 'full_and_flush', 'incremental']
 
   def enqueue
+    Rails.logger.info "HARVESTING ISSUE: enqueue"
     HarvestWorker.perform_async(self.id.to_s)
   end
 
@@ -34,6 +35,7 @@ class HarvestJob < AbstractJob
   end
 
   def flush_old_records
+    Rails.logger.info "HARVESTING ISSUE: flush old"
     begin
       RestClient.post("#{ENV['API_HOST']}/harvester/records/flush.json", {source_id: self.source_id, job_id: self.id})
     rescue RestClient::Exception => e
@@ -44,6 +46,7 @@ class HarvestJob < AbstractJob
   end
 
   def records(&block)
+    Rails.logger.info "HARVESTING ISSUE: records"
     begin
       start! unless self.active?
 
@@ -62,7 +65,7 @@ class HarvestJob < AbstractJob
         yield record, index
       end
     rescue StandardError, ScriptError => e
-      Rails.logger.error "HARVESTING ERROR: #{e}"
+      Rails.logger.error "HARVESTING ISSUE: Error: #{e}"
       self.create_harvest_failure(exception_class: e.class, message: e.message, backtrace: e.backtrace[0..30])
       self.fail_job(e.message)
       Airbrake.notify(e)
