@@ -55,10 +55,13 @@ class HarvestJob < AbstractJob
       parser_klass = parser.loader.parser_class
       parser_klass.environment = environment if environment.present?
 
-      parser_klass.records(options).each_with_index do |record, index|
+      # SUSPECIOUS. TRY WHAT I DID IN METRICS CRON
+      # https://boost.airbrake.io/projects/96483/groups/1663437486133491168/notices/1663437485249530348
+      parser_klass.records(options).no_timeout.each_with_index do |record, index|
         yield record, index
       end
     rescue StandardError, ScriptError => e
+      Rails.logger.error "HARVESTING ERROR: #{e}"
       self.create_harvest_failure(exception_class: e.class, message: e.message, backtrace: e.backtrace[0..30])
       self.fail_job(e.message)
       Airbrake.notify(e)
