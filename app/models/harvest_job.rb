@@ -62,7 +62,7 @@ class HarvestJob < AbstractJob
         yield record, index
       end
     rescue StandardError, ScriptError => e
-      Rails.logger.error "HARVESTING ISSUE: Error: #{e}"
+      Rails.logger.error "HARVESTING ISSUE: HarvestJob Error: #{e}"
       self.create_harvest_failure(exception_class: e.class, message: e.message, backtrace: e.backtrace[0..30])
       self.fail_job(e.message)
       Airbrake.notify(e)

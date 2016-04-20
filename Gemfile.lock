@@ -1,6 +1,7 @@
 GIT
   remote: https://github.com/DigitalNZ/supplejack_common.git
-  revision: f90be0d7302e2b102ffe532f9b56bdbac05c2caf
+  revision: b6adef5044087180b8e72d0b06ee0e717e1161b1
+  branch: ed/harvest-issue
   specs:
     supplejack_common (0.0.2)
       actionpack (<= 4.1.4)
@@ -245,7 +246,7 @@ GEM
     rb-fsevent (0.9.4)
     rb-inotify (0.9.5)
       ffi (>= 0.5.0)
-    redis (3.2.2)
+    redis (3.3.0)
     ref (1.0.5)
     rest-client (1.6.9)
       mime-types (~> 1.16)

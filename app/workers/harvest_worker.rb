@@ -60,6 +60,7 @@ class HarvestWorker < AbstractWorker
         job.invalid_records.build(created_at: Time.now, raw_data: record.raw_data, error_messages: record.errors.full_messages)
       end
     rescue StandardError => e
+      Rails.logger.error "HARVESTING ISSUE: HarvestWorker Error: #{e}"
       failed_record = job.failed_records.build(created_at: Time.now, exception_class: e.class, message: e.message, backtrace: e.backtrace[0..5])
       failed_record.raw_data = record.try(:raw_data) rescue nil
       Airbrake.notify(e)
