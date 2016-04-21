@@ -58,8 +58,13 @@ class HarvestJob < AbstractJob
 
       # ISSUE HERE.
       # https://boost.airbrake.io/projects/96483/groups/1663437486133491168/notices/1663437485249530348
-      parser_klass_records = parser_klass.records(options)
-      Rails.logger.info "HARVESTING ISSUE: parser_klass_records: #{parser_klass_records}"
+      begin 
+        parser_klass_records = parser_klass.records(options)
+        Rails.logger.info "HARVESTING ISSUE: parser_klass_records: #{parser_klass_records}"
+      rescue  StandardError, ScriptError => e
+        parser_klass_records = []
+        Rails.logger.info "HARVESTING ISSUE: parser_klass_records ERROR: #{e}"
+      end
 
       parser_klass_records.each_with_index do |record, index|
         yield record, index
