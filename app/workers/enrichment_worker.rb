@@ -69,7 +69,7 @@ class EnrichmentWorker < AbstractWorker
         unless enrichment.errors.any?
           post_to_api(enrichment) unless job.test?
         else
-          Airbrake.notify(StandardError.new("Enrichment Errors: #{enrichment.errors.inspect}"))
+          # Airbrake.notify(StandardError.new("Enrichment Errors: #{enrichment.errors.inspect}"))
           Sidekiq.logger.error "Enrichment Errors on #{enrichment_class}: #{enrichment.errors.inspect} \n JOB: #{job.inspect} \n OPTIONS: #{enrichment_options.inspect}, RECORD: #{record.inspect} \n PARSER CLASS: #{@parser_class.inspect}"
         end
 

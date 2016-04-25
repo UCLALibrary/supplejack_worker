@@ -20,7 +20,8 @@ class HarvestWorker < AbstractWorker
     job.update_attribute(:status_message, "Failed with exception #{msg['error_message']}")
     job.error!
 
-    Sidekiq.logger.warn "HarvestJob #{job_id} FAILED with exception #{msg['error_message']}"
+    Sidekiq.logger.warn "HarvestJob FAILED: job #{job_id} failed with exception #{msg['error_message']}"
+    Sidekiq.logger.warn "HarvestJob FAILED: for #{job.parser.source.source_id}"
   end
 
   def perform(harvest_job_id)
