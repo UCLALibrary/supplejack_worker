@@ -7,3 +7,5 @@ end
 Sidekiq.configure_client do |config|
   config.redis = { url: ENV['REDIS_HOST'] }
 end
+
+Rails.logger.info 'DID THE DEPLOY WORK????'
