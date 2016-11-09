@@ -1,6 +1,6 @@
 GIT
   remote: https://github.com/DigitalNZ/supplejack_common.git
-  revision: 3dcd6dd59a2fb7a30f389e7d64b4c7764b134aaf
+  revision: e1f982cd0e0fbb69bde445aa78d405df6a13ddcb
   branch: jl/fix_invalid_utf8_chars
   specs:
     supplejack_common (0.0.2)
