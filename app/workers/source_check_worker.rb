@@ -13,8 +13,14 @@ class SourceCheckWorker
 
   def perform(id)
     @source = Source.find(id)
+    Sidekiq.logger.info "DEBUG:SOURCE: #{@source}"
     
     source_up = source_records.any? {|r| up?(r) }
+
+    Sidekiq.logger.info "DEBUG:UP: #{source_up}"
+    Sidekiq.logger.info "DEBUG:suppress_collection: #{not source_up and source_active?}"
+    Sidekiq.logger.info "DEBUG:activate_collection: #{source_up and not source_active?}"
+
 
     suppress_collection if not source_up and source_active?
     activate_collection if source_up and not source_active?
@@ -23,7 +29,9 @@ class SourceCheckWorker
   private
 
   def source_records
-    JSON.parse(RestClient.get("#{ENV['API_HOST']}/sources/#{self.source._id}/link_check_records"))
+    links = JSON.parse(RestClient.get("#{ENV['API_HOST']}/sources/#{self.source._id}/link_check_records"))
+    Sidekiq.logger.info "DEBUG:LINKS: #{links}"
+    links
   end
 
   def source_active?
